@@ -1,0 +1,76 @@
+openapi: 3.0.0
+info:
+  title: NewsAPI
+  description: API for accessing up-to-date news headlines and metadata from various sources.
+  version: 1.0.0
+servers:
+  - url: https://newsapi.org/v2
+    description: Main API server for NewsAPI
+paths:
+  /topHeadlines:
+    get:
+      operationId: getTopHeadlines
+      summary: Retrieves top headlines
+      parameters:
+        - name: q
+          in: query
+          schema:
+            type: string
+        - name: category
+          in: query
+          schema:
+            type: string
+        - name: language
+          in: query
+          schema:
+            type: string
+        - name: country
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Top headlines returned
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  articles:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        # Define article properties here
+  /everything:
+    get:
+      operationId: getEverything
+      summary: Retrieves all news articles based on the query
+      parameters:
+        # Define the parameters like q, sources, domains, from, to, language, sortBy, page
+      responses:
+        '200':
+          description: All matching articles returned
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  # Define response properties here
+  /sources:
+    get:
+      operationId: getSources
+      summary: Retrieves the available news sources
+      parameters:
+        # Define parameters like category, language, country
+      responses:
+        '200':
+          description: News sources returned
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  # Define source properties here
