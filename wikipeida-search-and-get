@@ -1,0 +1,124 @@
+openapi: 3.0.0
+info:
+  title: Wikipedia Search and Retrieve API
+  description: API for searching and retrieving content from Wikipedia.
+  version: 1.0.0
+servers:
+  - url: https://en.wikipedia.org/api/rest_v1
+    description: Wikipedia REST API
+paths:
+  /page/summary/{title}:
+    get:
+      operationId: getPageSummary
+      summary: Get a summary of a Wikipedia page
+      parameters:
+        - name: title
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Summary of the page returned
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  title:
+                    type: string
+                  extract:
+                    type: string
+                  content_urls:
+                    type: object
+                    properties:
+                      desktop:
+                        type: object
+                        properties:
+                          page:
+                            type: string
+                          revisions:
+                            type: string
+                          edit:
+                            type: string
+                          talk:
+                            type: string
+  /page/media-list/{title}:
+    get:
+      operationId: getPageMediaList
+      summary: Get a list of media items on a Wikipedia page
+      parameters:
+        - name: title
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of media items on the page returned
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        section_id:
+                          type: integer
+                        type:
+                          type: string
+                        title:
+                          type: string
+                        srcset:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              src:
+                                type: string
+                              scale:
+                                type: string
+  /search/page:
+    get:
+      operationId: searchPages
+      summary: Search Wikipedia pages
+      parameters:
+        - name: q
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 10
+      responses:
+        '200':
+          description: Search results returned
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  pages:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        key:
+                          type: string
+                        title:
+                          type: string
+                        excerpt:
+                          type: string
+                        match:
+                          type: object
+                          properties:
+                            text:
+                              type: string
