@@ -1,0 +1,43 @@
+Start
+ |
+ |--(1) Authenticate with API Token
+ |    |--(1.1) Include API token in Authorization header as "Bearer <your_api_token>"
+ |
+ |--(2) Retrieve Current Tasks
+ |    |--(2.1) Make GET request to https://api.todoist.com/rest/v1/tasks
+ |    |    |--Headers: Authorization: Bearer <your_api_token>
+ |    |--(2.2) Store retrieved tasks
+ |
+ |--(3) Extract Date and Time from Input Task
+ |    |--(3.1) Parse input task to extract specific date and time (e.g., "YYYY-MM-DDT12:00:00")
+ |
+ |--(4) Evaluate Existing Tasks for Timing Conflict
+ |    |--(4.1) For each stored task, parse date and time
+ |    |    |--If any task is scheduled for the extracted date and time, note conflict
+ |
+ |--(5) Decision Making Based on Timing Conflict
+      |--(5.1) If a timing conflict exists:
+      |    |--(5.1.1) Do not add the new task. Inform user of the timing conflict. End.
+      |
+      |--(5.2) If no timing conflict:
+           |--(5.2.1) Prepare task details in JSON payload with placeholders
+           |    |--JSON Schema:
+           |         {
+           |           "content": "<Task_Content>",
+           |           "due_string": "<Due_Date_Time>",
+           |           "due_lang": "en",
+           |           "priority": <Priority_Level>
+           |         }
+           |    |--Replace <Task_Content> with the content of the new task.
+           |    |--Replace <Due_Date_Time> with the parsed date and time from input.
+           |    |--Set <Priority_Level> based on user input or default to a value.
+           |
+           |--(5.2.2) Make POST request to add the new task without conflict
+           |    |--Endpoint: https://api.todoist.com/rest/v1/tasks
+           |    |--Method: POST
+           |    |--Headers: Content-Type: application/json, Authorization: Bearer <your_api_token>
+           |    |--Body: JSON with dynamically constructed task details based on placeholders
+           |
+           |--(5.2.3) Check API response for success
+                |--If success, confirm task added. End.
+                |--Else, handle error accordingly. End.
